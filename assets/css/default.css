@@ -191,3 +191,39 @@ td, th {
     margin-left: 0.5em;
     background-color: #da7ea6
 }
+
+
+p.question {
+    border: 1px solid #ccc;
+    padding: .5em 1em;
+    text-align: left;
+    font-style: italic; 
+    position: relative;
+}
+
+p.question:before {
+    content: 'Question';
+    font-weight: bold;
+    font-style: normal;
+    margin-right: 1em;
+}
+
+p.question em {
+    font-style: normal;
+}
+
+p.homework {
+    border-left: 5px solid #000;
+    padding-left: 1em;
+    font-style: italic;
+}
+p.homework:before {
+    content: 'Homework exercise';
+    font-style: normal; 
+    font-weight: bold;
+    margin-right: 1em;
+}
+
+h1 {
+    margin-top: 3em;
+}

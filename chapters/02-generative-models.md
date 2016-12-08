@@ -108,7 +108,7 @@ Using `flip` we can construct more complex expressions that describe more compli
 flip() + flip() + flip()
 ~~~~
 
-What if we want to invoke this sampling process multiple times? We would like to construct a stochastic function that adds three random numbers each time it is called.
+What if we want to invoke this sampling process multiple times? We would like to construct a *stochastic* function that adds three random numbers each time it is called.
 We can use `function` to construct such complex stochastic functions from the primitive ones.
 
 ~~~~
@@ -186,7 +186,7 @@ var data = repeat(1000, function() { sum(repeat(10, coin)) })
 viz(data, {xLabel: '# heads'})
 ~~~~
 
-## Example: Causal Models in Medical Diagnosis
+<!-- ## Example: Causal Models in Medical Diagnosis
 
 Generative knowledge is often *causal* knowledge that describes how events or states of the world are related to each other.
 As an example of how causal knowledge can be encoded in WebPPL expressions, consider a simplified medical scenario:
@@ -254,7 +254,7 @@ Most likely all the symptoms will be false, as (thankfully) each of these diseas
 Experiment with running the program multiple times.
 Now try modifying the `var` statement for one of the diseases, setting it to be true, to simulate only patients known to have that disease.
 For example, replace `var lungCancer = flip(0.01)` with `var lungCancer = true`.
-Run the program several times to observe the characteristic patterns of symptoms for that disease.
+Run the program several times to observe the characteristic patterns of symptoms for that disease. -->
 
 # Prediction, Simulation, and Probabilities
 
@@ -404,7 +404,7 @@ From the point of view of directly computing probabilities, marginalization is s
 Putting the product and sum rules together, the marginal probability of return values from a program that we have explored above is the sum over sampling histories of the product over choice probabilities---a computation that can quickly grow unmanageable, but can be approximated by `Infer`.
 
 
-# Stochastic recursion
+<!-- # Stochastic recursion
 
 [Recursive functions](https://en.wikipedia.org/wiki/Recursion_(computer_science)) are a powerful way to structure computation in deterministic systems.
 In WebPPL it is possible to have a *stochastic* recursion that randomly decides whether to stop.
@@ -421,7 +421,7 @@ viz(g)
 ~~~~
 
 There is no upper bound on how long the computation can go on, although the probability of reaching some number declines quickly as we go.
-Indeed, stochastic recursions must be constructed to halt eventually (with probability 1).
+Indeed, stochastic recursions must be constructed to halt eventually (with probability 1). -->
 
 
 # Persistent Randomness: `mem`
@@ -478,7 +478,7 @@ of all the others. The outcome of each, once determined, will always have the sa
 In computer science memoization is an important technique for optimizing programs by avoiding repeated work.
 In the probabilistic setting, such as in WebPPL, memoization actually affects the meaning of the memoized function.
 
-# Example: Intuitive physics
+<!-- # Example: Intuitive physics
 
 Humans have a deep intuitive understanding of everyday physics---this allows us to make furniture, appreciate sculpture, and play baseball.
 How can we describe this intuitive physics? One approach is to posit that humans have a generative model that captures key aspects of real physics, though perhaps with approximations and noise.
@@ -633,7 +633,7 @@ viz(
 // physics.animate(1000, almostUnstableWorld)
 // physics.animate(1000, unstableWorld)
 ~~~~
-
+ -->
 Test your knowledge: [Exercises]({{site.baseurl}}/exercises/02-generative-models.html)
 
 Next chapter: [Conditioning]({{site.baseurl}}/chapters/03-conditioning.html)
