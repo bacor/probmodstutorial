@@ -16,11 +16,12 @@
     <script src="{{ site.baseurl }}/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="{{ site.baseurl }}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="{{ site.baseurl }}/bower_components/underscore/underscore.js"></script>
-
+    <!-- <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans:100,100i,400,400i,700,700i|Ubuntu+Mono:400,400i,700,700i" rel="stylesheet"> -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    </script>
 
     {% if layout.custom_css %}
       {% for stylesheet in layout.custom_css %}
@@ -70,7 +71,7 @@
             <li><a href="{{ site.baseurl }}/">Home</a></li>
             <li role="separator" class="divider"></li>
             {% for p in sorted_pages %}
-            {% if p.layout == 'chapter' %}
+            {% if p.layout == 'chapter' and p.tutorial == 1 %}
             <li><a href="{{ site.baseurl }}{{ p.url }}">{{ p.title }}</a></li>
             {% endif %}
             {% endfor %}

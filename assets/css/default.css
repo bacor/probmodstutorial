@@ -1,9 +1,7 @@
 /* Global layout adjustments */
 
 html {
-    background: url(../../assets/img/grey_wash_wall.png);
-    background-attachment: fixed;
-    background-color: #626262;
+    background: #eee;
 }
 
 
@@ -17,7 +15,7 @@ body div.container {
     margin-top: 3em;
    max-width: 950px;
    background-color: #fefefe;
-   box-shadow: 0 0 15px rgba(0, 0, 0, .3);
+   /*box-shadow: 0 0 15px rgba(0, 0, 0, .3);*/
    padding-left: 5em;
    padding-right: 5em;
    padding-bottom: 2em;
@@ -33,9 +31,9 @@ body div.container {
 
 ul.nav {
     position: fixed;
-    margin-left: -8.1em;
+    margin-left: -8.2em;
     margin-top: 4.5em;
-    background-color: #32682f;
+    background-color: #fff;
     z-index: 9999999999;
 }
 

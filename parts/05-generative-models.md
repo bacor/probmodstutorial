@@ -1,6 +1,7 @@
 ---
 layout: chapter
-title: Generative models
+tutorial: 1
+title: Optional — Generative models
 description: Representing working models with probabilistic programs.
 custom_js:
 - assets/js/box2d.js
@@ -8,13 +9,7 @@ custom_js:
 - assets/js/plinko.js
 ---
 
-<!--
-robert_hawkins [11:49 AM]  
-a couple issues with the chapter:
-1. the heading structure is a bit confusing — the “Building Generative Models” section starts with some info on webppl, has a subsection “example: flipping coins”, and then pops out to the outer level for “example: medical diagnosis”. Maybe we could signpost that better, like create a subsection where we explicitly describe webppl, a subsection about sampling, and indent the medical diagnosis example one level?
-2. the “prediction, simulation, and probabilities” section uses both bayesian and frequentist notions of probability without labeling them or distinguishing them (e.g. “A probability is… a degree of belief”, but “We may define the probability … to be the fraction of times (in the long run) that this value is returned”). It’d be nice to say that these are alternate ways of formalizing probability?
-3. I like the new "constructing marginal distributions with `Infer`" section… Should we rewrite other models in future chapters that use `repeat` to use `forward` instead?
--->
+*This is an excerpt of [ProbMods, Chapter 2](https://probmods.org/v2/chapters/02-generative-models.html).*
 
 # Models, simulation, and degrees of belief
 
@@ -54,31 +49,11 @@ The key idea of this section is that these generative processes can be described
 
 Programming languages are formal systems for describing what (deterministic) computation a computer should do. Modern programming languages offer a wide variety of different ways to describe computation; each makes some processes simple to describe and others more complex. However, a key tenet of computer science is that all of these languages have the same fundamental power: any computation that can be described with one programming language can described by another. (More technically this Church-Turing thesis posits that many specific computational systems capture the set of all effectively computable procedure. These are called *universal* systems.)
 
-<!--
-As our formal model of computation we start with the $$\lambda$$-calculus, and its embodiment in the LISP family of programming languages.
-The $$\lambda$$-calculus is a formal system which was invented by Alonzo Church in 1936 as a way of formalizing the notion of an effectively computable function [@Church1936].
-The $$\lambda$$-calculus has only two basic operations for computing: creating and applying functions.
-Despite this simplicity, it is a *universal* model of computation---it is (conjectured to be) equivalent to all other notions of classical computation.
-(The $$\lambda$$-calculus was shown to have the same computational power as the Turing machine, and vice versa, by Alan Turing in his famous paper which introduced the Turing machine [@Turing1937]).
--->
-
-<!--
-In 1958 John McCarthy introduced LISP (**LIS**t **P**rocessing), a programming language based on the $$\lambda$$-calculus.
-Scheme is a variant of LISP developed by Guy L.
-Steele and Gerald Jay Sussman with particularly simple syntax and semantics.
-We will use Scheme-style notation for the $$\lambda$$-calculus in this tutorial.
-For a quick introduction to programming in Scheme see [the appendix on Scheme basics](appendix-scheme.html).
-The Church programming language [@Goodman2008], named in honor of Alonzo Church, is a generalization of Scheme which introduces the notion of probabilistic computation to the language.
-This addition results in a powerful language for describing generative models.
--->
-
 In this book we will build on the JavaScript language, which is a portable and flexible modern programming language.
 The [WebPPL language](http://webppl.org) takes a subset of JavaScript and extends it with pieces needed to describe *probabilistic* computation.
 The key idea is that we have primitive operations that describe not only deterministic functions (like `and`) but stochastic operations.
-<!--
-In WebPPL, in addition to deterministic functions, we have a set of random functions implementing *random choices.*  These random primitive functions are called *Exchangeable Random Primitives* (XRPs).
-Application of an XRP results in a *sample* from the probability distribution defined by that XRP.
--->
+
+
 For example, the `flip` function can be thought of as simulating a (possibly biased) coin toss (technically `flip` samples from a Bernoulli distribution, which we'll return to shortly):
 
 ~~~~
@@ -186,75 +161,7 @@ var data = repeat(1000, function() { sum(repeat(10, coin)) })
 viz(data, {xLabel: '# heads'})
 ~~~~
 
-<!-- ## Example: Causal Models in Medical Diagnosis
 
-Generative knowledge is often *causal* knowledge that describes how events or states of the world are related to each other.
-As an example of how causal knowledge can be encoded in WebPPL expressions, consider a simplified medical scenario:
-
-~~~~
-var lungCancer = flip(0.01);
-var cold = flip(0.2);
-var cough = cold || lungCancer;
-cough;
-~~~~
-
-This program models the diseases and symptoms of a patient in a doctor's office.
-It first specifies the base rates of two diseases the patient could have: lung cancer is rare while a cold is common, and there is an independent chance of having each disease.
-The program then specifies a process for generating a common symptom of these diseases -- an effect with two possible causes: The patient coughs if they have a cold or lung cancer (or both).
-
-Here is a more complex version of this causal model:
-
-~~~~
-var lungCancer = flip(0.01);
-var TB = flip(0.005);
-var stomachFlu = flip(0.1);
-var cold = flip(0.2);
-var other = flip(0.1);
-
-var cough = (
-    (cold && flip(0.5)) ||
-    (lungCancer && flip(0.3)) ||
-    (TB && flip(0.7)) ||
-    (other && flip(0.01)))
-
-var fever = (
-    (cold && flip(0.3)) ||
-    (stomachFlu && flip(0.5)) ||
-    (TB && flip(0.1)) ||
-    (other && flip(0.01)))
-
-var chestPain = (
-    (lungCancer && flip(0.5)) ||
-    (TB && flip(0.5)) ||
-    (other && flip(0.01)))
-
-var shortnessOfBreath = (
-    (lungCancer && flip(0.5)) ||
-    (TB && flip(0.2)) ||
-    (other && flip(0.01)))
-
-var symptoms = {
-  cough: cough,
-  fever: fever,
-  chestPain: chestPain,
-  shortnessOfBreath: shortnessOfBreath
-};
-
-symptoms
-~~~~
-
-Now there are four possible diseases and four symptoms.
-Each disease causes a different pattern of symptoms.
-The causal relations are now probabilistic: Only some patients with a cold have a cough (50%), or a fever (30%).
-There is also a catch-all disease category "other", which has a low probability of causing any symptom.
-*Noisy logical* functions---functions built from **and** (`&&`), **or** (`||`), and `flip`---provide a simple but expressive way to describe probabilistic causal dependencies between Boolean (true-false valued) variables.
-
-When you run the above code, the program generates a list of symptoms for a hypothetical patient.
-Most likely all the symptoms will be false, as (thankfully) each of these diseases is rare.
-Experiment with running the program multiple times.
-Now try modifying the `var` statement for one of the diseases, setting it to be true, to simulate only patients known to have that disease.
-For example, replace `var lungCancer = flip(0.01)` with `var lungCancer = true`.
-Run the program several times to observe the characteristic patterns of symptoms for that disease. -->
 
 # Prediction, Simulation, and Probabilities
 
@@ -319,10 +226,6 @@ var foo = function(){return gaussian(0,1)*gaussian(0,1)}
 foo()
 ~~~
 
-<!--
-The `flip` function is the simplest way to interface with a distribution in WebPPL, but you will also find other familiar probability distributions, such as `gaussian`, `gamma`, `dirichlet`, and so on.-->
-
-<!-- describe Distribution generators, distirbutions, and sample here. -->
 
 ## Constructing marginal distributions: `Infer`
 
@@ -403,27 +306,6 @@ From the point of view of sampling processes marginalization is simply ignoring 
 From the point of view of directly computing probabilities, marginalization is summing over all the possible "histories" that could lead to a return value.
 Putting the product and sum rules together, the marginal probability of return values from a program that we have explored above is the sum over sampling histories of the product over choice probabilities---a computation that can quickly grow unmanageable, but can be approximated by `Infer`.
 
-
-<!-- # Stochastic recursion
-
-[Recursive functions](https://en.wikipedia.org/wiki/Recursion_(computer_science)) are a powerful way to structure computation in deterministic systems.
-In WebPPL it is possible to have a *stochastic* recursion that randomly decides whether to stop.
-For example, the *geometric distribution* is a probability distribution over the non-negative integers.
-We imagine flipping a (weighted) coin, returning $$N-1$$ if the first `true` is on the Nth flip (that is, we return the number of times we get `false` before our first `true`):
-
-~~~~
-var geometric = function (p) {
-    flip(p) ? 0 : 1 + geometric(p);
-};
-var g = Infer({method: 'forward', samples: 1000},
-              function(){return geometric(0.6)})
-viz(g)
-~~~~
-
-There is no upper bound on how long the computation can go on, although the probability of reaching some number declines quickly as we go.
-Indeed, stochastic recursions must be constructed to halt eventually (with probability 1). -->
-
-
 # Persistent Randomness: `mem`
 
 It is often useful to model a set of objects that each have a randomly chosen property. For instance, describing the eye colors of a set of people:
@@ -477,163 +359,3 @@ of all the others. The outcome of each, once determined, will always have the sa
 
 In computer science memoization is an important technique for optimizing programs by avoiding repeated work.
 In the probabilistic setting, such as in WebPPL, memoization actually affects the meaning of the memoized function.
-
-<!-- # Example: Intuitive physics
-
-Humans have a deep intuitive understanding of everyday physics---this allows us to make furniture, appreciate sculpture, and play baseball.
-How can we describe this intuitive physics? One approach is to posit that humans have a generative model that captures key aspects of real physics, though perhaps with approximations and noise.
-This mental physics simulator could for instance approximate Newtonian mechanics, allowing us to imagine the future state of a collection of (rigid) bodies.
-We have included such a 2-dimensional physics simulator, the function `runPhysics`, that takes a collection of physical objects and runs physics 'forward' by some amount of time.
-(We also have `animatePhysics`, which does the same, but gives us an animation to see what is happening.)
-We can use this to imagine the outcome of various initial states, as in the Plinko machine example above:
-
-~~~~
-var dim = function () { uniform(5, 20) }
-var staticDim = function () { uniform(10, 50) }
-var shape = function () { flip() ? 'circle' : 'rect' }
-var xpos = function () { uniform(100, worldWidth - 100) }
-var ypos = function () { uniform(100, worldHeight - 100) }
-
-var ground = {shape: 'rect',
-              static: true,
-              dims: [worldWidth, 10],
-              x: worldWidth/2,
-              y: worldHeight}
-
-var falling = function () {
-  return {shape: shape(), static: false, dims: [dim(), dim()], x: xpos(), y: 0}
-};
-
-var fixed = function () {
-  return {shape: shape(), static: true, dims: [staticDim(), staticDim()], x: xpos(), y: ypos()}
-}
-
-var fallingWorld = [ground, falling(), falling(), falling(), fixed(), fixed()]
-physics.animate(1000, fallingWorld);
-~~~~
-
-There are many judgments that you could imagine making with such a physics simulator.
-@Hamrick2011 have explored human intuitions about the stability of block towers.
-Look at several different random block towers; first judge whether you think the tower is stable, then simulate to find out if it is:
-
-~~~~
-var xCenter = worldWidth / 2
-var ground = {shape: 'rect', static: true, dims: [worldWidth, 10], x: worldWidth/2, y: worldHeight}
-var dim = function() { uniform(10, 50) };
-var xpos = function(prevBlock) {
-  var prevW = prevBlock.dims[0]
-  var prevX = prevBlock.x
-  uniform(prevX - prevW, prevX + prevW)
-};
-
-var ypos = function(prevBlock, h) {
-  var prevY = prevBlock.y
-  var prevH = prevBlock.dims[1]
-  prevY - (prevH + h)
-};
-
-var addBlock = function(prevBlock, isFirst) {
-  var w = dim()
-  var h = dim()
-  return {shape: 'rect',
-          static: false,
-          dims: [w, h],
-          x: isFirst ? xCenter : xpos(prevBlock),
-          y: ypos(prevBlock, h)}
-};
-
-var makeTowerWorld = function () {
-  var block1 = addBlock(ground, true);
-  var block2 = addBlock(block1, false);
-  var block3 = addBlock(block2, false);
-  var block4 = addBlock(block3, false);
-  var block5 = addBlock(block4, false);
-  return [ground, block1, block2, block3, block4, block5]
-};
-
-physics.animate(1000, makeTowerWorld())
-~~~~
-
-Were you often right?
-Were there some cases of 'surprisingly stable' towers?  @Hamrick2011 account for these cases by positing that people are not entirely sure where the blocks are initially (perhaps due to noise in visual perception).
-Thus our intuitions of stability are really stability given noise (or the expected stability marginalizing over slightly different initial configurations).
-We can realize this measure of stability as:
-
-~~~~
-var listMin = function(xs) {
-  if (xs.length == 1) {
-    return xs[0]
-  } else {
-    return Math.min(xs[0], listMin(rest(xs)))
-  }
-}
-
-var ground = {shape: 'rect', static: true, dims: [worldWidth, 10],
-              x: worldWidth/2, y: worldHeight+6};
-
-var stableWorld = [
-  ground,
-  {shape: 'rect', static: false, dims: [60, 22], x: 175, y: 473},
-  {shape: 'rect', static: false, dims: [50, 38], x: 159.97995044874122, y: 413},
-  {shape: 'rect', static: false, dims: [40, 35], x: 166.91912737427202, y: 340},
-  {shape: 'rect', static: false, dims: [30, 29], x: 177.26195677111082, y: 276},
-  {shape: 'rect', static: false, dims: [11, 17], x: 168.51354470809122, y: 230}
-]
-
-var almostUnstableWorld = [
-  ground,
-  {shape: 'rect', static: false, dims: [24, 22], x: 175, y: 473},
-  {shape: 'rect', static: false, dims: [15, 38], x: 159.97995044874122, y: 413},
-  {shape: 'rect', static: false, dims: [11, 35], x: 166.91912737427202, y: 340},
-  {shape: 'rect', static: false, dims: [11, 29], x: 177.26195677111082, y: 276},
-  {shape: 'rect', static: false, dims: [11, 17], x: 168.51354470809122, y: 230}
-]
-
-var unstableWorld = [
-  ground,
-  {shape: 'rect', static: false, dims: [60, 22], x: 175, y: 473},
-  {shape: 'rect', static: false, dims: [50, 38], x: 90, y: 413},
-  {shape: 'rect', static: false, dims: [40, 35], x: 140, y: 340},
-  {shape: 'rect', static: false, dims: [10, 29], x: 177.26195677111082, y: 276},
-  {shape: 'rect', static: false, dims: [50, 17], x: 140, y: 230}
-]
-
-var doesTowerFall = function (initialW, finalW) {
-  var highestY = function (w) { listMin(map(function(obj) { return obj.y }, w)) }
-  var approxEqual = function (a, b) { Math.abs(a - b) < 1.0 }
-  !approxEqual(highestY(initialW), highestY(finalW))
-}
-
-var noisify = function (world) {
-  var perturbX = function (obj) {
-    var noiseWidth = 10
-    obj.static ? obj : _.extend({}, obj, {x: uniform(obj.x - noiseWidth, obj.x + noiseWidth) })
-  }
-  map(perturbX, world)
-}
-
-var run = function(world) {
-  var initialWorld = noisify(world)
-  var finalWorld = physics.run(1000, initialWorld)
-  doesTowerFall(initialWorld, finalWorld)
-}
-
-viz(
-  Infer({method: 'forward', samples: 100},
-        function() { run(stableWorld) }))
-viz(
-  Infer({method: 'forward', samples: 100},
-        function() { run(almostUnstableWorld) }))
-viz(
-  Infer({method: 'forward', samples: 100},
-        function() { run(unstableWorld) }))
-
-// uncomment any of these that you'd like to see for yourself
-// physics.animate(1000, stableWorld)
-// physics.animate(1000, almostUnstableWorld)
-// physics.animate(1000, unstableWorld)
-~~~~
- -->
-Test your knowledge: [Exercises]({{site.baseurl}}/exercises/02-generative-models.html)
-
-Next chapter: [Conditioning]({{site.baseurl}}/chapters/03-conditioning.html)

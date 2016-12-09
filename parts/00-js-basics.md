@@ -1,13 +1,17 @@
 ---
 layout: chapter
-title: JavaScript basics
+tutorial: 1
+title: Part 0 — JavaScript basics
 description: A very brief primer on JavaScript.
 ---
 
+*This part is adapted from the [ProbMods' appendix](https://probmods.org/v2/chapters/13-appendix-js-basics.html)*
+
+
+# Variables
 The previous labs used the programming language R. In this tutorial, we will be using a language based on JavaScript. 
 We quickly go through the basics of JavaScript and point out where it differs from R.
 
-# Variables
 First things first.
 In R you would define variables as `someVariable <- 3`; in JavaScript you can define variables using the keyword `var`:
 
@@ -205,9 +209,11 @@ var g = function(){ return 8 }
 repeat(100, g)
 ~~~~
 
+<hr />
+Continue to [part 1 of the tutorial]({{ site.base_url }}/parts/01-bags.html) or go to the [home page]({{ site.base_url }}).
 
-# Want to know more?
+<!-- # Want to know more?
 If you want to know more about Javascript, [JavaScript: The Good Parts](http://bdcampbell.net/javascript/book/javascript_the_good_parts.pdf) is an excellent introduction to the language.
-Online tutorials can be found [here](http://www.w3schools.com/js/), [there](https://www.javascript.com), and [elsewhere](https://www.codeschool.com/learn/javascript).
+Online tutorials can be found [here](http://www.w3schools.com/js/), [there](https://www.javascript.com), and [elsewhere](https://www.codeschool.com/learn/javascript). -->
 
-Test your knowledge: [Exercises]({{site.baseurl}}/exercises/13-appendix-js-basics.html)
+<!-- Test your knowledge: [Exercises]({{site.baseurl}}/exercises/13-appendix-js-basics.html) -->
