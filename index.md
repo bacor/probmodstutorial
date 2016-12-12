@@ -36,7 +36,7 @@ The goal of this tutorial is to implement some of the hierarchical Bayesian mode
 Since we have only two hours for the actual tutorial, we need to get through the basics quickly. 
 That will work best if you come prepared, even though the preparations shouldn't take a lot of extra time.
 
-1. Make sure you have read the [tutorial on Bayesian modelling by Amy Perfors et al. (2011)](http://www.sciencedirect.com/science/article/pii/S001002771000291X). Section 3 ("aquiring inductive constraints") is particularly relevant: the tutorial implements some of the models discussed there.
+1. Make sure you have read the [tutorial on Bayesian modelling by Amy Perfors et al. (2011)](http://www.sciencedirect.com/science/article/pii/S001002771000291X). Section 3 ("acquiring inductive constraints") is particularly relevant: the tutorial implements some of the models discussed there.
 2. JavaScript is not R, so please read this [a very brief introduction to JavaScript]({{ site.baseurl }}/parts/00-js-basics.html). As you will see, the syntax is not very different from R.
 3. **Optionally**, if you are interested in the underlying ideas, read [this short, general introduction](https://probmods.org/v2/chapters/01-introduction.html)
 4. **Optionally**, if you want to be super prepared, read [this (excerpt from) the second chapter on generative models]({{ site.baseurl }}/parts/05-generative-models.html). The latter might be particularly useful for those who have never seen any probability theory, but you should also be able to do the tutorial without reading it.
