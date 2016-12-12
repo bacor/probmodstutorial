@@ -352,10 +352,10 @@ viz(Infer({method: 'MCMC', samples:500}, function() {
 }))
 ~~~~
 
-Try increasing the $$\alpha$$ from 0.1 to 1 and further. Explain what effect this parameter has. (Note that the limits of the plot are automatically adjusted!)
+Try increasing the $$\alpha$$ from 0.1 to 1 and further. Explain what effect this parameter has on the distribution and what that means for the typical draws from the distribution. (Note that the limits of the plot are automatically adjusted!)
 {: .homework }
 
-Uncomment the second `beta` and (sytematically) play around with its values. (Tip: fix $$\alpha=1$$.) Can you explain what this parameter roughly does? Why is the first $$\beta$$ called a *symmetrical* Dirichlet distribution? 
+Uncomment the second `beta` and (systematically) play around with its values. (Tip: fix $$\alpha=1$$.) Can you explain what this parameter roughly does? Why is the first $$\beta$$ called a *symmetrical* Dirichlet distribution? 
 {: .homework }
 
 # A hierarchical model of a bag of marbles
