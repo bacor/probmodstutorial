@@ -32,6 +32,10 @@ The goal of this tutorial is to implement some of the hierarchical Bayesian mode
 
 **Tip:** If you want to play around with WebPPL, you can find an editor and more examples on [webppl.org](http://webppl.org).
 
+**Submission.**
+Submit your solutions to the **homework exercises** a blackboard before the lecture on Thursday (15:00). Please hand in a single PDF file in which you explain your solutions. Also, make sure your answers are easy to find and not hidden between blocks of code!
+
+
 # Preparation
 Since we have only two hours for the actual tutorial, we need to get through the basics quickly. 
 That will work best if you come prepared, even though the preparations shouldn't take a lot of extra time.

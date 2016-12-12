@@ -431,11 +431,14 @@ viz(drawMarbles('another_bag'))
 ~~~
 
 As you can see, samples from the same bag follow the same distribution, but samples from different bags do not. 
-Even though the distributions in different bags differ, they are similar in the sense that both distributions are fairly flat.
+Even though the distributions in different bags differ, they are similar in the sense that both distributions are fairly *flat*: the bags contain multiple colors.
+In other words, they are not strongly *peaked*, i.e. they don't put all probability mass on a few colors.
 
-What do you have to change in the model to get strongly peaked distributions? In other words, what do you have to change to ensure that all bags will strongly favour a few colors, even though different bags can still favour different colors? 
-And how can you get really flat distributions for all bags? 
-Explain what you changed, why that works and include plots of the two bags to illustrate your answer (you can download graphs by clicking on the 'tool' icon).
+
+What do you have to change in the model to get strongly peaked distributions? 
+<!-- In other words, what do you have to change to ensure that all bags will strongly favour a few colors, even though different bags can still favour different colors?  -->
+And how can you get really flat distributions in all bags? 
+Explain what part of the code you changed, why that works and include plots of the two bags to illustrate your answer (you can download graphs by clicking on the 'tool' icon).
 {: .homework }
 
 In the previous exercise, you forced the model to show peaked distributions, but can you also force it to peak at a specific point? 

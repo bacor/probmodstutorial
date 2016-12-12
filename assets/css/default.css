@@ -9,6 +9,9 @@ body {
     background-color: transparent;
     font-family: Georgia;
     font-size: 15px;
+    counter-reset: hw-counter;
+    counter-increment: hw-counter;
+
 }
 
 body div.container {
@@ -216,10 +219,11 @@ p.homework {
     font-style: italic;
 }
 p.homework:before {
-    content: 'Homework exercise';
+    content: 'Homework exercise ' counter(hw-counter);
     font-style: normal; 
     font-weight: bold;
     margin-right: 1em;
+    counter-increment: hw-counter;
 }
 
 h1 {
