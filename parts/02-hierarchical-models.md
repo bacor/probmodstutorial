@@ -47,9 +47,75 @@ viz(drawMarbles('other_bag', 100))
 As this examples shows, `mem` is particularly useful when writing hierarchical models because it allows us to associate arbitrary random draws with categories across entire runs of the program. In this case it allows us to associate a particular mixture of marble colors with each bag. The mixture is drawn once, and then remains the same thereafter for that bag. Intuitively, you can see how each sample is sufficient to learn a lot about what that bag is like; there is typically a fair amount of similarity between the empirical color distributions in each of the four samples from `bag`.  In contrast, you should see a different distribution of samples from `other_bag`.
  -->
 
-Early in part 1, we considered three bags of which we knew the distributions. That allowed us to for example answer which bag most likely generated which color, but you can't do much more. Importantly, we could not infer the distribution of marbles in the bags in the light of some observed data. But once we assume that the distributions come from a another distribution, we can. 
-<!-- Intuitively, one could try many different `colorProbs` and for every choice draw marbles from all bags. If you assign greater weight to the `colorProbs` that explain the data better, you can infer the  -->
-So let's add a few twists: we will generate three different bags, and try to learn about their respective color prototypes by conditioning on observations. We represent the results of learning in terms of the *posterior predictive* distribution for each bag: a single hypothetical draw from the bag.  We will also draw a sample from the posterior predictive distribution on a new bag, for which we have had no observations.
+<!-- Early in part 1, we considered three bags of which we knew the distributions. That allowed us to for example answer which bag most likely generated which color, but you can't do much more. Importantly, we could not infer the distribution of marbles in the bags in the light of some observed data. But once we assume that the distributions come from a another distribution, we can.  -->
+We will now generate three different bags, and try to learn about their respective color prototypes by conditioning on observations. We represent the results of learning in terms of the [*posterior predictive* distribution](https://en.wikipedia.org/wiki/Posterior_predictive_distribution) for each bag. 
+This distribution captures the probabilities of new observations (predictions, hence *predictive*) after you have already observed some data (*posterior*). 
+It shows the new beliefs about the marbles in the different bags. 
+
+Expanding on that a little, remember that in part 1 we tried to infer from which bag a blue marble was drawn. 
+Suppose we now observe a blue and a red marble, drawn from a single bag and want to *predict* the color of the next marble (from the same bag). 
+One could find the bag with highest posterior probability (here: bag 3) and use the marble distribution in that bag to make new preditions. 
+But this would ignore the uncertainty we still have about the bag used.
+In a Bayesian context, one would take that uncertainty into account by *averaging* over the bags according to their posterior probability.
+That means that our predictions will be heavily influenced by bag 3, but we do not completely exclude that the marbles came from bag 1 or 2, as you can see here:
+
+```
+///fold:
+var colors = ['black', 'blue', 'green', 'orange', 'red'];
+var bag1 = Categorical({vs: colors, ps: [.5,  .3,  .1, .05, .05]})
+var bag2 = Categorical({vs: colors, ps: [.05, .25, .4, .25, .05]})
+var bag3 = Categorical({vs: colors, ps: [.0,  .1,  .1, .3,  .5]})
+var bags = [bag1, bag2, bag3]
+///
+var priorProbs = [0.25, 0.5, 0.25]
+var posterior = Infer({method: 'enumerate'}, function() {
+  var bagNo = categorical({ vs: [1,2,3], ps: priorProbs })
+  var bag = bags[bagNo-1]
+  observe(bag, 'blue'); observe(bag, 'red')
+  return bagNo
+})
+
+var predictive = Infer({ method: 'enumerate' }, function() {
+  var bagNo = sample(posterior)
+  return sample(bags[bagNo-1])
+})
+
+print('posterior:'); viz(posterior)
+print('predictive:'); viz(predictive)
+print('bag3:'); viz(bag3)
+```
+
+(Earlier we used a `condition` statement rather than `observe`. In this case, `observe(model, outcome)` has the same effect as `condition(sample(model) == outcome)`.) 
+
+In this example you see two strategies for making new predictions: predict colors according to their probability under the most likely hypothesis (i.e., bag 3), or according to the posterior predictive distribution.
+Both methods yield different predictions.
+Importantly, they differ in their predictions about black marbles. 
+Why are the black marbles telling?
+Which of the two methods would you consider to be more 'cautious'?
+{: .question }
+
+Note that we can compress the previous example by inferring the predictive distribution directly:
+
+~~~
+///fold:
+var colors = ['black', 'blue', 'green', 'orange', 'red'];
+var bag1 = Categorical({vs: colors, ps: [.5,  .3,  .1, .05, .05]})
+var bag2 = Categorical({vs: colors, ps: [.05, .25, .4, .25, .05]})
+var bag3 = Categorical({vs: colors, ps: [.0,  .1,  .1, .3,  .5]})
+var bags = [bag1, bag2, bag3]
+///
+var priorProbs = [0.25, 0.5, 0.25]
+viz(Infer({method: 'enumerate'}, function() {
+  var bagNo = categorical({ vs: [1,2,3], ps: priorProbs })
+  var bag = bags[bagNo-1]
+  observe(bag, 'red'); observe(bag, 'orange')
+  return sample(bag)
+}))
+~~~
+
+In short, we can use the predictive distribution to understand how the model predictions change in the light of observed data. 
+As said, we will now consider that for observations from three different bags.
+We will also draw a sample from the posterior predictive distribution on a new bag called `bagN`, for which we have had no observations.
 
 ~~~
 var colors = ['black', 'blue', 'green', 'orange', 'red'];
@@ -64,7 +130,7 @@ var observedData = [
 {bag: 'bag3', draw: 'blue'}, {bag: 'bag3', draw: 'blue'},
 {bag: 'bag3', draw: 'blue'}, {bag: 'bag3', draw: 'orange'}]
 
-var predictives = Infer({method: 'MCMC', samples: 50000}, function(){
+var predictives = Infer({method: 'MCMC', samples: 20000}, function(){
 
   var getBag = mem(function(bagName) {
     var colorProbs = T.toScalars(dirichlet(Vector([1,1,1,1,1])))
@@ -98,7 +164,7 @@ var observedData = [
 {bag: 'bag3', draw: 'blue'}, {bag: 'bag3', draw: 'orange'}]
 ///
 
-var predictives = Infer({method: 'MCMC', samples: 50000}, function(){
+var predictives = Infer({method: 'MCMC', samples: 20000}, function(){
 
   // Shared alpha and beta
   var alpha = 1;
