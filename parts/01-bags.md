@@ -292,7 +292,7 @@ Now you're told that the drawn marble is red or green.
 Which bag did it come from? (Hint: `||` means "or" in JavaScript.)
 {: .question }
 
-You draw from bag 1 or 2, untill you draw a marble that is neither red nor green. 
+You draw from bag 1 or 2, until you draw a marble that is neither red nor green. 
 Which color will it most likely have? 
 Please hand in your code.
 (Hint: `!=` means "not equal"; `&&` means "and"; you can use multiple `condition(...)` statements.) 
@@ -366,7 +366,7 @@ Let's implement that: draw the parameters $$\theta$$ of the categorical distribu
 
 
 ~~~
-var colors = ['black', 'blue', 'green', 'orange', 'red'];
+var colors = ['black', 'blue', 'green'];
 var alpha = 0.1
 var beta = Vector([1,1,1])
 var prior = Dirichlet({ alpha: beta.mul(alpha) })
