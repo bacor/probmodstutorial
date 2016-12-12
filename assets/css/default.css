@@ -10,7 +10,6 @@ body {
     font-family: Georgia;
     font-size: 15px;
     counter-reset: hw-counter;
-    counter-increment: hw-counter;
 
 }
 

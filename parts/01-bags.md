@@ -82,13 +82,13 @@ You remove half of the `green` mables and replace them by `pink` marbles (a new 
 {: .question }
 
 # Multiple bags
-Suppose that we are now given three bags and also suppose we know how the marbles marbles of each color they contain:
+Suppose that we are now given three bags and suppose we also know how many marbles of each color they contain:
 
 ~~~
 var colors = ['black', 'blue', 'green', 'orange', 'red'];
 var bag1 = Categorical({vs: colors, ps: [.5,  .3,  .1, .05, .05]})
 var bag2 = Categorical({vs: colors, ps: [.05, .25, .4, .25, .05]})
-var bag3 = Categorical({vs: colors, ps: [.0,  .1,  .1, .3,  .5]})
+var bag3 = Categorical({vs: colors, ps: [.0,  .1,  .1, .3,  .5 ]})
 viz(bag1); viz(bag2); viz(bag3);
 ~~~
 
@@ -120,7 +120,7 @@ If every bag contains marbles of only one color, we certainly can.
 But what if the bags contain multiple colors? 
 You can be fairly certain that a black marble was drawn from bag 1, but some uncertainty remains. 
 It could also have been drawn from 2 or 3, even though that is less likely.
-This is uncertainty is even larger after observing a blue marble, since bag 1 and 2 contain nearly equal numbers of blue marbles.
+This uncertainty is even larger after observing a blue marble, since bag 1 and 2 contain nearly equal numbers of blue marbles.
 
 Let's further complicate the example and suppose that bag 1 and 3 are positioned much further away than bag 2.
 As a result, drawing from bag 2 becomes twice as likely as drawing from bag 1 or 3.
@@ -141,7 +141,7 @@ viz(Categorical({vs: bags, ps: bagProbs}))
 
 Again you are shown a marble drawn from an unkown bag.
 This time, it is blue. 
-Which bag do you think it came from, if you take into account that bag 2 is now twice as likely as bag 2 or 3?
+Which bag do you think it came from, if you take into account that bag 2 is now twice as likely as bag 1 or 3?
 {: .question }
 
 Already, it's not completely clear anymore which bag that should be, even though you might have a hunch about it. 
