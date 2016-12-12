@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Probabilistic Models of Cognition - 2nd Edition
+title: FNCM 2016 - Lab on Hierarchical Bayesian Models
 custom_js:
 - assets/js/index.js
 custom_css:
