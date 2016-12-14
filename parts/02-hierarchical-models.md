@@ -108,7 +108,7 @@ var priorProbs = [0.25, 0.5, 0.25]
 viz(Infer({method: 'enumerate'}, function() {
   var bagNo = categorical({ vs: [1,2,3], ps: priorProbs })
   var bag = bags[bagNo-1]
-  observe(bag, 'red'); observe(bag, 'orange')
+  observe(bag, 'blue'); observe(bag, 'red')
   return sample(bag)
 }))
 ~~~

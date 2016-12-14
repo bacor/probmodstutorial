@@ -289,7 +289,7 @@ To find out, change the condition `marble == blue` in an appropriate way.
 {: .question }
 
 Now you're told that the drawn marble is red or green. 
-Which bag did it come from? (Hint: `||` means "or" in JavaScript.)
+Which bag did it most likely come from? (Hint: `||` means "or" in JavaScript.)
 {: .question }
 
 You draw from bag 1 or 2, until you draw a marble that is neither red nor green. 
